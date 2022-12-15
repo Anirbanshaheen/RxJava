@@ -6,21 +6,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
-import com.example.rxjava.Model.Post;
-import com.example.rxjava.Retrofit.Api;
-import com.example.rxjava.Retrofit.RetrofitClient;
+import com.example.rxjava.Model.PostModel;
+import com.example.rxjava.network.ServiceInterface;
+import com.example.rxjava.network.RetrofitClient;
 
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    Api api;
+    ServiceInterface serviceInterface;
     RecyclerView recyclerView;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -29,8 +27,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Retrofit retrofit = RetrofitClient.getInstance();
-        api = retrofit.create(Api.class);
+        serviceInterface = RetrofitClient.getClient(this).create(ServiceInterface.class);
+        //api = retrofit.create(Api.class);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -40,25 +38,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.add(api.getPosts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<Post>>() {
-                    @Override
-                    public void accept(List<Post> posts) throws Exception {
-                        displayData(posts);
-                    }
+        compositeDisposable.add(serviceInterface.getPosts().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) // todo subscribe with when use
+                .subscribe(postModels -> {
+                    displayData(postModels);
+                }, throwable -> {
+                    throwable.getMessage();
                 }));
     }
 
-    private void displayData(List<Post> posts) {
-        PostAdapter postAdapter = new PostAdapter(this,posts);
+    private void displayData(List<PostModel> postModels) {
+        PostAdapter postAdapter = new PostAdapter(this, postModels);
         recyclerView.setAdapter(postAdapter);
     }
 
     @Override
     protected void onStop() {
-        compositeDisposable.clear();
+        compositeDisposable.clear(); // clear all instance that we created
         super.onStop();
     }
 }

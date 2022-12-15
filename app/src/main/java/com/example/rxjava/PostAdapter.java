@@ -9,18 +9,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.rxjava.Model.Post;
+import com.example.rxjava.Model.PostModel;
 
 import java.util.List;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     Context context;
-    List<Post> postList;
+    List<PostModel> postModelList;
 
-    public PostAdapter(Context context, List<Post> postList) {
+    public PostAdapter(Context context, List<PostModel> postModelList) {
         this.context = context;
-        this.postList = postList;
+        this.postModelList = postModelList;
     }
 
     @NonNull
@@ -32,15 +32,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.textView1.setText(postList.get(position).title);
-        holder.textView2.setText(String.valueOf(postList.get(position).userId));
-        holder.textView3.setText(new StringBuilder(postList.get(position).body.substring(0, 20))
+        holder.textView1.setText(postModelList.get(position).title);
+        holder.textView2.setText(String.valueOf(postModelList.get(position).userId));
+        holder.textView3.setText(new StringBuilder(postModelList.get(position).body.substring(0, 20))
                 .append("...").toString());
     }
 
     @Override
     public int getItemCount() {
-        return postList.size();
+        return postModelList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

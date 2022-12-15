@@ -1,15 +1,15 @@
 package com.example.rxjava.Model;
 
-public class Post {
+public class PostModel {
     public int userId;
     public int it;
     public String title;
     public String body;
 
-    public Post() {
+    public PostModel() {
     }
 
-    public Post(int userId, int it, String title, String body) {
+    public PostModel(int userId, int it, String title, String body) {
         this.userId = userId;
         this.it = it;
         this.title = title;
