@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.rxjava.Model.PostModel;
+import com.example.rxjava.databinding.ActivityMainBinding;
 import com.example.rxjava.network.ServiceInterface;
 import com.example.rxjava.network.RetrofitClient;
 
@@ -18,23 +20,29 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ActivityMainBinding binding;
+
     ServiceInterface serviceInterface;
-    RecyclerView recyclerView;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         serviceInterface = RetrofitClient.getClient(this).create(ServiceInterface.class);
         //api = retrofit.create(Api.class);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         fetchData();
+        clickEvent();
+    }
+
+    private void clickEvent() {
+        binding.continueBtn.setOnClickListener(view -> {
+            startActivity(new Intent(MainActivity.this, FormActivity.class));
+        });
     }
 
     private void fetchData() {
@@ -48,7 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void displayData(List<PostModel> postModels) {
         PostAdapter postAdapter = new PostAdapter(this, postModels);
-        recyclerView.setAdapter(postAdapter);
+
+        binding.recyclerView.setHasFixedSize(true);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(postAdapter);
     }
 
     @Override

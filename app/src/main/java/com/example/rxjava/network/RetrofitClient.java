@@ -17,6 +17,7 @@ public class RetrofitClient {
     //private static Retrofit ourInstance;
 
     private static Retrofit retrofit = null;
+    private static Retrofit retrofitFromActivity = null;
     private static final long TIMEOUT = 120L;
     private static OkHttpClient okHttpClient;
 
@@ -26,13 +27,28 @@ public class RetrofitClient {
 
         if (retrofit == null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://jsonplaceholder.typicode.com/")  //BuildConfig.BASE_URL
+                    .baseUrl("https://jsonplaceholder.typicode.com/")  //BuildConfig.BASE_URL first page https://jsonplaceholder.typicode.com/
                     .client(okHttpClient)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // without call, supporting the service method
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit;
+    }
+
+    public static Retrofit getClientFormActivity(Context context) {
+        if (okHttpClient == null)
+            initOkHttp(context);
+
+        if (retrofitFromActivity == null) {
+            retrofitFromActivity = new Retrofit.Builder()
+                    .baseUrl("https://reqres.in/api/")  //BuildConfig.BASE_URL second page https://reqres.in/api/
+                    .client(okHttpClient)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // without call, supporting the service method
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofitFromActivity;
     }
 
     private static void initOkHttp(Context context) {
