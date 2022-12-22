@@ -3,6 +3,8 @@ package com.example.rxjava.network;
 
 
 import com.example.rxjava.Model.DataModal;
+import com.example.rxjava.Model.PassengerModel;
+import com.example.rxjava.Model.PassengerModelRequest;
 import com.example.rxjava.Model.PostModel;
 import java.util.List;
 import io.reactivex.Single;
@@ -17,4 +19,7 @@ public interface ServiceInterface {
 
     @POST("users")
     Single<DataModal> createPost(@Body DataModal dataModal);
+
+    @POST("passenger")
+    Single<PassengerModelRequest> createPassengerData(@Body PassengerModelRequest passengerModelRequest);
  }

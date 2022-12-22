@@ -1,7 +1,8 @@
-package com.example.rxjava;
+package com.example.rxjava.Pages;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -29,10 +30,7 @@ public class FormActivity extends AppCompatActivity {
         binding = ActivityFormBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
         clickEvent();
-
         fetchData();
     }
 
@@ -47,13 +45,19 @@ public class FormActivity extends AppCompatActivity {
                 }
             }
         });
+
+        binding.continueBtn.setOnClickListener(view -> {
+            startActivity(new Intent(FormActivity.this, PassengerFormActivity.class));
+        });
     }
 
     private void fetchData() {
         serviceInterface = RetrofitClient.getClientFormActivity(this).create(ServiceInterface.class);
         DataModal modal = new DataModal(binding.idEdtName.getText().toString(), binding.idEdtJob.getText().toString());
 
-        compositeDisposable.add(serviceInterface.createPost(modal).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        compositeDisposable.add(serviceInterface.createPost(modal)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(postModels -> {
                     displayData(postModels);
                 }, throwable -> {

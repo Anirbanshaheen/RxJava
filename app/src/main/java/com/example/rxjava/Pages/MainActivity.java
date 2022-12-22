@@ -1,13 +1,13 @@
-package com.example.rxjava;
+package com.example.rxjava.Pages;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.rxjava.Model.PostModel;
+import com.example.rxjava.PostAdapter;
 import com.example.rxjava.databinding.ActivityMainBinding;
 import com.example.rxjava.network.ServiceInterface;
 import com.example.rxjava.network.RetrofitClient;
@@ -46,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchData() {
-        compositeDisposable.add(serviceInterface.getPosts().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) // todo subscribe with when use
+        compositeDisposable.add(serviceInterface.getPosts()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()) // todo subscribe with when use
                 .subscribe(postModels -> {
                     displayData(postModels);
                 }, throwable -> {

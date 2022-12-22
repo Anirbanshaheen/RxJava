@@ -18,6 +18,7 @@ public class RetrofitClient {
 
     private static Retrofit retrofit = null;
     private static Retrofit retrofitFromActivity = null;
+    private static Retrofit retrofitPassengerFromActivity = null;
     private static final long TIMEOUT = 120L;
     private static OkHttpClient okHttpClient;
 
@@ -49,6 +50,21 @@ public class RetrofitClient {
                     .build();
         }
         return retrofitFromActivity;
+    }
+
+    public static Retrofit getClientPassengerFormActivity(Context context) {
+        if (okHttpClient == null)
+            initOkHttp(context);
+
+        if (retrofitPassengerFromActivity == null) {
+            retrofitPassengerFromActivity = new Retrofit.Builder()
+                    .baseUrl("https://api.instantwebtools.net/v1/")  //BuildConfig.BASE_URL third page https://api.instantwebtools.net/v1/
+                    .client(okHttpClient)
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create()) // without call, supporting the service method
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return retrofitPassengerFromActivity;
     }
 
     private static void initOkHttp(Context context) {
