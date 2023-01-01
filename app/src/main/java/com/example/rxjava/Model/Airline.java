@@ -1,18 +1,34 @@
 package com.example.rxjava.Model;
 
-import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Airline {
 
+    @SerializedName("id")
+    @Expose
     private Integer id;
+    @SerializedName("name")
+    @Expose
     private String name;
+    @SerializedName("country")
+    @Expose
     private String country;
+    @SerializedName("logo")
+    @Expose
     private String logo;
+    @SerializedName("slogan")
+    @Expose
     private String slogan;
-    private String head_quaters;
+    @SerializedName("head_quaters")
+    @Expose
+    private String headQuaters;
+    @SerializedName("website")
+    @Expose
     private String website;
+    @SerializedName("established")
+    @Expose
     private String established;
-
 
     public Integer getId() {
         return id;
@@ -55,11 +71,11 @@ public class Airline {
     }
 
     public String getHeadQuaters() {
-        return head_quaters;
+        return headQuaters;
     }
 
     public void setHeadQuaters(String headQuaters) {
-        this.head_quaters = headQuaters;
+        this.headQuaters = headQuaters;
     }
 
     public String getWebsite() {
